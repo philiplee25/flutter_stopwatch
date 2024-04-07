@@ -15,7 +15,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   int _time = 0;
   bool _isRunning = false;
 
-  List<String> _lapTimes = [];
+  final List<String> _lapTimes = [];
 
   void _clickButton() {
     _isRunning = !_isRunning;
@@ -46,6 +46,10 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     _time = 0;
   }
 
+  void _recordLapTime(String time) {
+    _lapTimes.insert(0, '${_lapTimes.length + 1}등 $time');
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -70,10 +74,10 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             children: [
               Text(
                 '$sec',
-                style: TextStyle(fontSize: 50),
+                style: const TextStyle(fontSize: 50),
               ),
               Text(
-                '$hundredth',
+                hundredth,
               ),
             ],
           ),
@@ -81,16 +85,8 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             width: 100,
             height: 100,
             child: ListView(
-              children: [
-                Text('111'),
-                Text('111'),
-                Text('111'),
-                Text('111'),
-                Text('111'),
-                Text('111'),
-                Text('111'),
-                Text('111'),
-              ],
+              children:
+                  _lapTimes.map((time) => Center(child: Text(time))).toList(),
             ),
           ),
           const Spacer(),
@@ -118,7 +114,11 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
               ),
               FloatingActionButton(
                 backgroundColor: Colors.green,
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    _recordLapTime('$sec.$hundredth');
+                  });
+                },
                 child: const Icon(Icons.add),
               ),
             ],
